@@ -1,6 +1,7 @@
 $light-green: rgba(92,184,92, .2);
 $white: #fff;
 $black: #000;
+$whiteTone: #eee;
 
 @mixin cellStyle($width, $height) {
   width: $width;
@@ -52,7 +53,7 @@ $black: #000;
 .ui.secondary.menu {
   padding: 4px;
   border: 1px solid $light-green;
-  background-color: $light-green;
+  background-color: $whiteTone;
 
   a.item {
     font-weight: bold;

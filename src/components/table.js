@@ -26,6 +26,7 @@ for property access is O(1)
 import React, { Component } from "react";
 import { generateDiamondSweeperBoard } from "../utils/helper";
 import { generateRandomDiamondPositions } from "../utils/helper";
+import { generateHintPosition } from "../utils/helper";
 const uuidv4 = require("uuid/v4");
 
 export default class Table extends Component {
@@ -39,16 +40,7 @@ export default class Table extends Component {
   };
 
   componentDidMount() {
-    const hintPositions = {};
-    for (
-      let i = 0, len = Object.keys(this.state.diamondPositions).length;
-      i < len;
-      i++
-    ) {
-      let getKey = Object.keys(this.state.diamondPositions)[i];
-      getKey = parseInt(getKey, 10) - 1;
-      hintPositions[getKey] = true;
-    }
+    const hintPositions = generateHintPosition(this.state.diamondPositions);
 
     const sweeperBoard = this.state.sweeperBoard.map(item => {
       // mark diamond position in sweeperBoard
@@ -101,13 +93,7 @@ export default class Table extends Component {
     const foundDiamondPosition = [];
     const noOfCellsLeftUnturned = [];
     const isGameOver = false;
-    const hintPositions = {};
-
-    for (let i = 0, len = Object.keys(diamondPositions).length; i < len; i++) {
-      let getKey = Object.keys(diamondPositions)[i];
-      getKey = parseInt(getKey, 10) - 1;
-      hintPositions[getKey] = true;
-    }
+    const hintPositions = generateHintPosition(diamondPositions);
 
     const sweeperBoard = generateDiamondSweeperBoard(64).map(item => {
       // mark diamond position in sweeperBoard

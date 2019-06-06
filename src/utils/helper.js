@@ -28,3 +28,15 @@ export const generateRandomDiamondPositions = (
   }
   return diamondPositions;
 };
+
+export const generateHintPosition = diamondPositions => {
+  const hintPositions = {};
+
+  for (let i = 0, len = Object.keys(diamondPositions).length; i < len; i++) {
+    let getKey = Object.keys(diamondPositions)[i];
+    getKey = parseInt(getKey, 10) - 1;
+    hintPositions[getKey] = true;
+  }
+
+  return hintPositions;
+};
