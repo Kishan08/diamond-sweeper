@@ -1,24 +1,115 @@
-table.diamondsweeper-board {
-  td {
-    padding: 0;
-    border: 1px solid black;
+$light-green: rgba(92,184,92, .2);
+$white: #fff;
+$black: #000;
+
+@mixin cellStyle($width, $height) {
+  width: $width;
+  height: $height;
+  background-size: $width $height;
+}
+
+@mixin uiCellStyle($width, $height) {
+  .ui.diamondsweeper-board {
+    .cell {
+      @include cellStyle($width, $height);
+    }
   }
 }
 
-.cell {
-  height: 50px;
-  width: 50px;
-  background-size: 50px 50px;
+@mixin sweeperContainer($percentage) {
+  .sweeper-container {
+    width: $percentage;
+    margin: 0 auto;
+  }
+}
 
-  &.diamond {
-    background-image: url(./assets/diamond.png);
+.ui.table:first-child {
+  margin-top: 32px;
+}
+
+#game-over {
+  pointer-events: none;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.ui.card .title-text {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+}
+
+.card-text {
+  margin-top: 0;
+}
+
+.ui.card {
+  width: 100%;
+  padding: 16px;
+}
+
+.ui.secondary.menu {
+  padding: 4px;
+  border: 1px solid $light-green;
+  background-color: $light-green;
+
+  a.item {
+    font-weight: bold;
+    font-size: 18px;
+    color: $black;
+  }
+}
+
+.ui.table tr td {
+  border-top: 1px solid $black;
+}
+
+.ui.diamondsweeper-board {
+  border-collapse: collapse;
+  td {
+    padding: 0;
+    border: 1px solid $black;
   }
 
-  &.arrow {
-    background-image: url(./assets/arrow.png);
+  .cell {
+    @include cellStyle(50px, 50px);
+  
+    &.diamond {
+      background-image: url(./assets/diamond.png);
+    }
+  
+    &.arrow {
+      background-image: url(./assets/arrow.png);
+    }
+  
+    &.unknown {
+      background-image: url(./assets/question.png);
+    }
   }
+}
+ 
+@media only screen and (min-width: 801px) {
+  @include sweeperContainer(40%);
+}
 
-  &.unknown {
-    background-image: url(./assets/question.png);
-  }
+@media only screen and (max-width: 769px) {
+  @include sweeperContainer(60%);
+  @include uiCellStyle(50px, 50px);
+}
+
+@media only screen and (max-width: 414px) {
+  @include uiCellStyle(42px, 42px);
+}
+
+@media only screen and (max-width: 376px) {
+  @include uiCellStyle(38px, 38px);
+}
+
+@media only screen and (max-width: 361px) {
+  @include uiCellStyle(35px, 35px);
+}
+
+@media only screen and (max-width: 321px) {
+  @include uiCellStyle(30px, 30px);
 }
