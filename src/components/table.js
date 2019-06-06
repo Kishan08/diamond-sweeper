@@ -1,3 +1,28 @@
+/*
+NOTE: Switched diamondPositions and hintPositions from an array to an object. Where 
+key is the diamondPosition and value is any truthy value.
+Below is the reason for switching:
+
+Previously when we click on any of the cell of the sweeperBoard, I was iterating over a 
+sweeperBoard array of objects, then I'll check if cell id is present in the diamondPosition
+array or not something like this:
+
+const sweeperBoard = this.state.sweeperBoard.map(item => {
+  if (this.state.diamondPositions.includes(item.id)) {
+    item.isDiamond = true;
+  }
+  return item;
+});
+
+Notice that in the above solution we're checking that if diamondPositions includes
+the cell id. But this is very ineffective process and has an O(n^2) time complexity.
+Why because includes also internally loop through an array so basically it's loop inside loop.
+
+That is the reason for switching from an array to an object as with object, the time complexity
+for property access is O(1) 
+
+*/
+
 import React, { Component } from "react";
 import { generateDiamondSweeperBoard } from "../utils/helper";
 import { generateRandomDiamondPositions } from "../utils/helper";
@@ -7,31 +32,50 @@ export default class Table extends Component {
   state = {
     sweeperBoard: generateDiamondSweeperBoard(64),
     diamondPositions: generateRandomDiamondPositions(64, 8),
+    hintPositions: {},
     foundDiamondPosition: [],
     noOfCellsLeftUnturned: [],
     isGameOver: false
   };
 
   componentDidMount() {
+    const hintPositions = {};
+    for (
+      let i = 0, len = Object.keys(this.state.diamondPositions).length;
+      i < len;
+      i++
+    ) {
+      let getKey = Object.keys(this.state.diamondPositions)[i];
+      getKey = parseInt(getKey, 10) - 1;
+      hintPositions[getKey] = true;
+    }
+
     const sweeperBoard = this.state.sweeperBoard.map(item => {
       // mark diamond position in sweeperBoard
-      if (this.state.diamondPositions.includes(item.id)) {
+      if (this.state.diamondPositions[item.id]) {
         item.isDiamond = true;
       }
       return item;
     });
 
-    this.setState({ sweeperBoard });
+    this.setState({ sweeperBoard, hintPositions });
   }
 
   onItemClick = (e, d) => {
     const sweeperBoard = this.state.sweeperBoard.map(item => {
       if (item.id === d) {
         item.isClicked = true;
+        if (this.state.hintPositions[d]) {
+          item.isHint = true;
+        }
+      } else {
+        // this will hide previous shown hint
+        item.isHint = false;
       }
       return item;
     });
 
+    // no. of diamonds discovered in the board
     const foundDiamondPosition = sweeperBoard.filter(
       item => item.isClicked === true && item.isDiamond === true
     );
@@ -57,10 +101,17 @@ export default class Table extends Component {
     const foundDiamondPosition = [];
     const noOfCellsLeftUnturned = [];
     const isGameOver = false;
+    const hintPositions = {};
+
+    for (let i = 0, len = Object.keys(diamondPositions).length; i < len; i++) {
+      let getKey = Object.keys(diamondPositions)[i];
+      getKey = parseInt(getKey, 10) - 1;
+      hintPositions[getKey] = true;
+    }
 
     const sweeperBoard = generateDiamondSweeperBoard(64).map(item => {
       // mark diamond position in sweeperBoard
-      if (diamondPositions.includes(item.id)) {
+      if (diamondPositions[item.id]) {
         item.isDiamond = true;
       }
       return item;
@@ -71,18 +122,20 @@ export default class Table extends Component {
       diamondPositions,
       foundDiamondPosition,
       noOfCellsLeftUnturned,
-      isGameOver
+      isGameOver,
+      hintPositions
     });
   };
 
   render() {
-    console.log(this.state.diamondPositions);
     let sweeperCells = [];
     this.state.sweeperBoard.forEach((item, i) => {
       let getClass = "cell";
       if (item.isClicked) {
         if (item.isDiamond) {
           getClass = "cell diamond";
+        } else if (item.isHint) {
+          getClass = "cell arrow";
         } else {
           getClass = "cell";
         }
