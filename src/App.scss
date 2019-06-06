@@ -94,11 +94,13 @@ $whiteTone: #eee;
   @include sweeperContainer(40%);
 }
 
-@media only screen and (max-width: 769px) {
+//for small tablets
+@media only screen and (min-width: 600px) and (max-width: 769px) {
   @include sweeperContainer(60%);
   @include uiCellStyle(50px, 50px);
 }
 
+//for mobiles
 @media only screen and (max-width: 414px) {
   @include uiCellStyle(42px, 42px);
 }
