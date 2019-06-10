@@ -1,26 +1,6 @@
 /*
-NOTE: Switched diamondPositions and hintPositions from an array to an object. Where 
-key is the diamondPosition and value is any truthy value.
-Below is the reason for switching:
-
-Previously when we click on any of the cell of the sweeperBoard, I was iterating over a 
-sweeperBoard array of objects, then I'll check if cell id is present in the diamondPosition
-array or not something like this:
-
-const sweeperBoard = this.state.sweeperBoard.map(item => {
-  if (this.state.diamondPositions.includes(item.id)) {
-    item.isDiamond = true;
-  }
-  return item;
-});
-
-Notice that in the above solution we're checking that if diamondPositions includes
-the cell id. But this is very ineffective process and has an O(n^2) time complexity.
-Why because includes also internally loop through an array so basically it's loop inside loop.
-
-That is the reason for switching from an array to an object as with object, the time complexity
-for property access is O(1) 
-
+NOTE: diamondPositions and hintPositions is an object. Where 
+key is the position of diamond on the board and value is any truthy value.
 */
 
 import React, { Component } from "react";
